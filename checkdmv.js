@@ -58,4 +58,8 @@ function process_date (date_str) {
     return new Date(year, monthMap[month], day, hour, minute);
 }
 
-$.post(url=url, data=data, success=parse_result);
+function submit_form () {
+    $.post(url=url, data=data, success=parse_result);
+}
+
+setInterval(submit_form, 10000)
