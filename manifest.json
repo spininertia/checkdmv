@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+
+  "name": "CheckDMV",
+  "description": "This extension checks the appointment for driver's license test.",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "",
+    "default_popup": ""
+  },
+  "permissions": [
+  ]
+}
