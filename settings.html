@@ -17,29 +17,66 @@
       <![endif]-->
   </head>
   <body>
-    <h1>Please fill in the form</h1>
-    <form id="myform">
-        <label for="firstName" class="col-lg-2 control-label">First Name</label>
-        <input type="text" class="form-control" id="firstName" placeholder="first name">
-        <label for="lastName" class="col-lg-2 control-label">Last Name</label>
-        <input type="text" class="form-control" id="lastName" placeholder="last name">
-        <label for="dlNumber" class="col-lg-2 control-label">Permit Number</label>
-        <input type="text" class="form-control" id="dlNumber" placeholder="F7728530"/>
+    <div class="container" style="width:40%">
+        <h1>Please fill in the form</h1>
+        <form id="myform" role="form"  >
+            <div class ="form-group row"> 
+                <div  class="col-lg-12">
+                    <label for="firstName" class="control-label">First Name</label>
+                    <input type="text" class="form-control" id="firstName" placeholder="first name">
+                </div>
+            </div> 
+            <div class ="form-group row"> 
+             <div  class="col-lg-12"> 
+                <label for="lastName" class="control-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName" placeholder="last name">
+            </div>
+        </div>
+        <div class ="form-group row"> 
+            <div  class="col-lg-12">
+                <label for="dlNumber" class="control-label">Permit Number</label>
+                <input type="text" class="form-control" id="dlNumber" placeholder="F7728530"/>
+            </div>
+        </div>
+        <div class ="form-group row">
+            <div  class="col-lg-12">
+                <label for="birthMonth" class="control-label">Birthday</label>
+                <input  type="text" class="form-control" id="birthMonth" placeholder="month"/>
+                <input  type="text" class="form-control" id="birthDay" placeholder="day"/>
+                <input  type="text" class="form-control" id="birthYear" placeholder="year"/>
+            </div>
+        </div>
+            <div class ="form-group row">
+            <div  class="col-lg-12">
+                <label for="birthDate" class="control-label">Birthday</label>
+                <input type="date" class="form-control" id="birthDate"/>
+            </div>
+        </div>
+        <div class ="form-group row">
+            <div  class="col-lg-12">
+               <label for="telephone" class="control-label">Phone</label>
+           </div>
+           <div id="telephone">
+            <div class="col-lg-3">    
+                <input type="text" class="form-control" id="telArea" placeholder="telArea"/>
+            </div>
+            <div class="col-lg-3">
+                <input type="text" class="form-control" id="telPrefix" placeholder="telPrefix"/>
+            </div>
+            <div class="col-lg-4">
+                <input type="text" class="form-control" id="telSuffix" placeholder="telSuffix"/>
+            </div>
+        </div>
+    </div>
+    <input  type="submit" value="check this out"/>
+</form>
+</div>
 
-        <input  type="text" class="form-control" id="birthMonth" placeholder="month"/>
-        <input  type="text" class="form-control" id="birthDay" placeholder="day"/>
-        <input  type="text" class="form-control" id="birthYear" placeholder="year"/>
-        <input  type="text" class="form-control" id="telArea" placeholder="telArea"/>
-        <input  type="text" class="form-control" id="telPrefix" placeholder="telPrefix"/>
-        <input  type="text" class="form-control" id="telSuffix" placeholder="telSuffix"/>
-        <input  type="submit" value="check this out"/>
-    </form>
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <!-- <script src="js/bootstrap.min.js"></script> -->
-    <script src ="js/jquery-1.11.1.min.js"></script>
-    <script src="js/settings.js"></script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<!-- <script src="js/bootstrap.min.js"></script> -->
+<script src ="js/jquery-1.11.1.min.js"></script>
+<script src="js/settings.js"></script>
 </body>
 </html>
