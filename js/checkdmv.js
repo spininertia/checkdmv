@@ -74,10 +74,10 @@ function submit_form(alarm) {
             $.post(url=url, data=params, success=parse_result);
         }
     });
-    chrome.alarms.create("checkdmv", {delayInMinutes: 0.2})
+    chrome.alarms.create("checkdmv", {delayInMinutes: 1})
 }
 
-chrome.alarms.create("checkdmv", {delayInMinutes: 0.2})
+chrome.alarms.create("checkdmv", {delayInMinutes: 1})
 chrome.alarms.onAlarm.addListener(submit_form)
 
 chrome.browserAction.onClicked.addListener(function(tab) {
