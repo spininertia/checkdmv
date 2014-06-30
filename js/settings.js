@@ -16,7 +16,7 @@ function check() {
         "beforeWhen" : $('#beforeWhen').val()
     }
     
-    alert(postInfo['form submitted!']);
+    alert('Start checking slots!');
     chrome.storage.local.set({"postInfo": postInfo}, function(){});
 
     chrome.storage.local.set({"dateInfo": dateInfo}, function(){});

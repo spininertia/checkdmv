@@ -1,5 +1,4 @@
 checkdmv
 ========
 
-auto-check behind-the-wheel driving test appointment
-check 
+A chrome extension that automatically checks the slot for driving test.
