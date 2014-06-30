@@ -1,45 +1,50 @@
 // var express = require('express');
 // var $ = require('jquery');
 var url = "https://www.dmv.ca.gov/wasapp/foa/findDriveTest.do";
-data = {
+
+var data = {
     'numberItems':'1',
     'officeId':'632',
     'requestedTask':'DT',
-    // 'firstName':'siping',
-    // 'lastName':'ji',
-    // 'dlNumber':'F7728530',
-    // 'birthMonth':'04',
-    // 'birthDay':'24',
-    // 'birthYear':'1991',
-    // 'telArea':'412',
-    // 'telPrefix':'304',
-    // 'telSuffix':'6862',
     'resetCheckFields':'true'
 };
 
-monthMap = {
-     'January': 0,
-     'February': 1,
-     'March': 2,
-     'April': 3,
-     'May': 4,
-     'June': 5,
-     'July': 6,
-     'August': 7,
-     'September': 8,
-     'October': 9,
-     'November': 10,
-     'December': 11,
+var monthMap = {
+   'January': 0,
+   'February': 1,
+   'March': 2,
+   'April': 3,
+   'May': 4,
+   'June': 5,
+   'July': 6,
+   'August': 7,
+   'September': 8,
+   'October': 9,
+   'November': 10,
+   'December': 11,
 }
 
-function parse_result (response) {
+var period = 1; // period to recheck appointment
+
+/************** check part **************/
+
+function process_result (response) {
     var html = $(response);
     var dateStr = $('#app_content', html).find('table').find('tr:nth-child(3)').find('.alert').html();
-    var date = process_date(dateStr);
+    var date = parse_date(dateStr);
+
     console.log(date);
+    chrome.storage.local.get("dateInfo", function(items) {
+        if (!$.isEmptyObject(items)) {
+            var beforeDate = new Date(items['dateInfo']['beforeWhen']);
+            if (date < beforeDate) {
+                notify(date)
+            }
+        }
+    });
 }
 
-function process_date (date_str) {
+function parse_date (date_str) {
     var arr = date_str.split(',');
     var day_month = arr[1].trim().split(' ');
     var month = day_month[0];
@@ -58,29 +63,82 @@ function process_date (date_str) {
     return new Date(year, monthMap[month], day, hour, minute);
 }
 
-function concat_map(map1, map2) {
+function concat_map (map1, map2) {
     var map = $.extend(true, {}, map1);
     for (var key in map2) {
         map[key] = map2[key];
     }
-
     return map;
 }
 
-function submit_form(alarm) {
-    chrome.storage.local.get("info", function(item) {
+function submit_form (alarm) {
+    chrome.storage.local.get("postInfo", function(item) {
         if (!$.isEmptyObject(item))  {
-            params = concat_map(data, item['info']);
-            $.post(url=url, data=params, success=parse_result);
+            params = concat_map(data, item['postInfo']);
+            $.post(url=url, data=params, success=process_result);
         }
     });
-    chrome.alarms.create("checkdmv", {delayInMinutes: 1})
+    chrome.alarms.create("checkdmv", {delayInMinutes: period})
 }
 
-chrome.alarms.create("checkdmv", {delayInMinutes: 1})
-chrome.alarms.onAlarm.addListener(submit_form)
+/************ notification part **********/
 
+function notify (date) {
+    var opt = {
+      type: "basic",
+      title: "Slot Available",
+      message: date.toString(),
+      iconUrl: "../images/notification.png",
+      isClickable: true
+  };
+
+  var notification = chrome.notifications.create(
+    date.toString(),
+    opt,
+    function (notificationId) {}
+    );
+}
+
+function append (form, key, value) {
+    var input = document.createElement('textarea');
+    input.setAttribute('name', key);
+    input.textContent = value;
+    form.appendChild(input);
+}
+
+function redirect () {
+    var postUrl = 'data:text/html;charset=utf8,';
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = url;
+
+    chrome.storage.local.get("postInfo", function(item) {
+        if (!$.isEmptyObject(item))  {
+            params = concat_map(data, item['postInfo']);
+            for (var key in params) {
+                append(form, key, params[key]);
+            }
+        }
+    });
+
+    postUrl += encodeURIComponent(form.outerHTML);
+    postUrl += encodeURIComponent('<script>document.forms[0].submit();</script>');
+    
+    chrome.tabs.create({url: postUrl, active: true});
+}
+
+
+function handleNotClick (notId) {
+    redirect()
+}
+
+
+chrome.notifications.onClicked.addListener(handleNotClick);
+chrome.alarms.create("checkdmv", {delayInMinutes: period});
+chrome.alarms.onAlarm.addListener(submit_form);
 chrome.browserAction.onClicked.addListener(function(tab) {
     chrome.tabs.create({'url': chrome.extension.getURL('../settings.html')}, function(tab){});
 });
+
+
 

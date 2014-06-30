@@ -1,24 +1,29 @@
 function check() {
-    var date = parse_date()
-    var info = {
+    var date = parse_date("birthDate");
+    var postInfo = {
         "firstName" : $('#firstName').val(),
         "lastName" : $('#lastName').val(),
         "dlNumber" : $('#dlNumber').val(),
-        "birthDay" : date['year'],
+        "birthDay" : date['day'],
         "birthMonth" : date['month'],
-        "birthYear" : date['day'],
+        "birthYear" : date['year'],
         "telArea" : $('#telArea').val(),
         "telPrefix" : $('#telPrefix').val(),
         "telSuffix" : $('#telSuffix').val()
     }
-    alert(info['firstName']);
-    chrome.storage.local.set({"info": info}, function() {
-        message('info saved');
-    });
+
+    var dateInfo = {
+        "beforeWhen" : $('#beforeWhen').val()
+    }
+    
+    alert(postInfo['form submitted!']);
+    chrome.storage.local.set({"postInfo": postInfo}, function(){});
+
+    chrome.storage.local.set({"dateInfo": dateInfo}, function(){});
 }
 
-function parse_date() {
-    var raw_arr = $("#birthDate").val().trim().split()
+function parse_date(field) {
+    var raw_arr = $("#".concat(field)).val().trim().split('-')
     var date = {
         "year" : raw_arr[0],
         "month" : raw_arr[1],
@@ -29,9 +34,9 @@ function parse_date() {
 
 $('#myform').on('submit', check)
 
-chrome.storage.local.get("info", function(items) {
-    if (!$.isEmptyObject("info")) {
-        map = items["info"];
+chrome.storage.local.get("postInfo", function(items) {
+    if (!$.isEmptyObject("postInfo")) {
+        map = items["postInfo"];
         $('#firstName').val(map["firstName"]);
         $('#lastName').val(map["lastName"]);
         $('#dlNumber').val(map["dlNumber"]);
@@ -39,5 +44,11 @@ chrome.storage.local.get("info", function(items) {
         $('#telArea').val(map['telArea']);
         $('#telPrefix').val(map['telPrefix']);
         $('#telSuffix').val(map['telSuffix']);
+    }
+});
+
+chrome.storage.local.get("dateInfo", function(items) {
+    if (!$.isEmptyObject("dateInfo")) {
+        $('#beforeWhen').val(items['dateInfo']['beforeWhen']);
     }
 });
