@@ -71,13 +71,25 @@ function concat_map (map1, map2) {
     return map;
 }
 
-function submit_form (alarm) {
+function submit_form (param) {
     chrome.storage.local.get("postInfo", function(item) {
         if (!$.isEmptyObject(item))  {
-            params = concat_map(data, item['postInfo']);
+            params = concat_map(param, item['postInfo']);
             $.post(url=url, data=params, success=process_result);
         }
     });
+}
+
+function poll (alarm) {
+    chrome.storage.local.get("officeInfo", function(item) {
+        if (!$.isEmptyObject(item)) {
+            for office in item['officeInfo']['officeId'] {
+                var params = $.extend(true, {}, data)
+                params['officeId'] = office
+                submit_form(params)
+            }  
+        }
+    })
     chrome.alarms.create("checkdmv", {delayInMinutes: period})
 }
 
@@ -135,7 +147,7 @@ function handleNotClick (notId) {
 
 chrome.notifications.onClicked.addListener(handleNotClick);
 chrome.alarms.create("checkdmv", {delayInMinutes: period});
-chrome.alarms.onAlarm.addListener(submit_form);
+chrome.alarms.onAlarm.addListener(poll);
 chrome.browserAction.onClicked.addListener(function(tab) {
     chrome.tabs.create({'url': chrome.extension.getURL('../settings.html')}, function(tab){});
 });
