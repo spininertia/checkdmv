@@ -4,7 +4,7 @@ var url = "https://www.dmv.ca.gov/wasapp/foa/findDriveTest.do";
 
 var data = {
     'numberItems':'1',
-    'officeId':'632',
+    // 'officeId':'632',
     'requestedTask':'DT',
     'resetCheckFields':'true'
 };
@@ -78,18 +78,6 @@ function submit_form (param) {
             $.post(url=url, data=params, success=process_result);
         }
     });
-}
-
-function poll (alarm) {
-    chrome.storage.local.get("officeInfo", function(item) {
-        if (!$.isEmptyObject(item)) {
-            for office in item['officeInfo']['officeId'] {
-                var params = $.extend(true, {}, data)
-                params['officeId'] = office
-                submit_form(params)
-            }  
-        }
-    })
     chrome.alarms.create("checkdmv", {delayInMinutes: period})
 }
 
@@ -142,7 +130,6 @@ function redirect () {
     chrome.tabs.create({url: postUrl, active: true});
 }
 
-
 function handleNotClick (notId) {
     redirect()
 }
@@ -154,7 +141,7 @@ function openSettingsPage(tab) {
 
 chrome.notifications.onClicked.addListener(handleNotClick);
 chrome.alarms.create("checkdmv", {delayInMinutes: period});
-chrome.alarms.onAlarm.addListener(poll);
+chrome.alarms.onAlarm.addListener(submit_form);
 chrome.browserAction.onClicked.addListener(openSettingsPage);
 chrome.runtime.onInstalled.addListener(openSettingsPage);
 

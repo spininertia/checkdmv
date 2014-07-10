@@ -9,7 +9,8 @@ function check() {
         "birthYear" : date['year'],
         "telArea" : $('#telArea').val(),
         "telPrefix" : $('#telPrefix').val(),
-        "telSuffix" : $('#telSuffix').val()
+        "telSuffix" : $('#telSuffix').val(),
+        "officeId" : $('#officeId').val()
     }
 
     var dateInfo = {
@@ -18,7 +19,6 @@ function check() {
     
     alert('Start checking slots!');
     chrome.storage.local.set({"postInfo": postInfo}, function(){});
-
     chrome.storage.local.set({"dateInfo": dateInfo}, function(){});
 }
 
@@ -44,6 +44,7 @@ chrome.storage.local.get("postInfo", function(items) {
         $('#telArea').val(map['telArea']);
         $('#telPrefix').val(map['telPrefix']);
         $('#telSuffix').val(map['telSuffix']);
+        $('#officeId').val(map['officeId']);
     }
 });
 
