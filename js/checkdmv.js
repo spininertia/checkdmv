@@ -107,8 +107,11 @@ function notify (date) {
   var notification = chrome.notifications.create(
     date.toString(),
     opt,
-    function (notificationId) {}
-    );
+    function (notificationId) {
+      var sound = new Audio('../res/notification.mp3');
+      sound.play();
+    }
+  );
 }
 
 function append (form, key, value) {
@@ -144,13 +147,15 @@ function handleNotClick (notId) {
     redirect()
 }
 
+function openSettingsPage(tab) {
+    chrome.tabs.create({'url': chrome.extension.getURL('../settings.html')}, function(tab){});
+}
+
 
 chrome.notifications.onClicked.addListener(handleNotClick);
 chrome.alarms.create("checkdmv", {delayInMinutes: period});
 chrome.alarms.onAlarm.addListener(poll);
-chrome.browserAction.onClicked.addListener(function(tab) {
-    chrome.tabs.create({'url': chrome.extension.getURL('../settings.html')}, function(tab){});
-});
-
+chrome.browserAction.onClicked.addListener(openSettingsPage);
+chrome.runtime.onInstalled.addListener(openSettingsPage);
 
 
